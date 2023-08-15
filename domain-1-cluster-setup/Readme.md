@@ -1,46 +1,55 @@
 # Domain 1 - Cluster Setup
 
-The code mentioned in this document are used in the Certified Kubernetes Security Specialist 2023 course.
+## 11-install-etcd.md
+## 15-configure-ca.md
+## 16-etcd-transit-encryption.md
+## 17-etcd-client-auth.md
+## 18-etcd-systemd.md
+## 19-verify-binaries.md
+## 20-configure-apiserver.md
+## 21-apiserver-transit-encryption.md
+## 23-token-authentication.md
+## 24-certificate-auth-k8s.md
+## 26-downside-token-auth.md
+## 28-authorization.md
+## 29-encryption-provider.md
+## 30-audit-logs.md
+## 31-kubeadm.md
+## 32-taint.md
+## 33-kubelet-security.md
 
+# Scripts
+## ca-install.sh 
+- create CA certificate
 
-# Video-Document Mapper
+## etcd-install.sh 
+- create ETCD certificate
+- launch ETCD
+### Informations
+- install-etcd.md
+### Before execute
+- ca-install.sh 
 
-| Sr No | Document Link |
-| ------ | ------ |
-| 1 | [Configuring ETCD Binaries][PlDa] |
-| 2 | [Overview of Certificate Authority][PlDb] |
-| 3 | [In-Transit Encryption with HTTPS][PlDc]
-| 4 | [Client Authentication in ETCD][PlDd] |
-| 5 | [Integrating Systemd with ETCD][PlDe] |
-| 6 | [Configuring API Server][PlDf] |
-| 7 | [Transport Security for API Server][PlDg] |
-| 8 | [Static Token Authentication][PlDh] |
-| 9 | [Downsides - Static Token Authentication][PlDi] |
-| 10 | [Implementing X509 Client Authentication][PlDj] |
-| 11 | [Authorization][PlDk] |
-| 12 | [Encryption Providers][PlDl] |
-| 13 | [Implementing Auditing][PlDm] |
-| 14 | [Setting up kubeadm cluster][PlDn] |
-| 15 | [Revising Taints and Tolerations][PlDo] |
-| 16 | [Kubelet Security][PlDp] |
-| 17 | [Verifying Platform Binaries][PlDq] |
+## kube-apiserver-install.sh
+- create Kubernetes Api Server certificates
+- launch Kubernetes Api Server certificates
 
+### Before execute
+- ca-install.sh 
+- etcd-install.sh
 
+## user-certificate.sh
+-- Create user certificates 
 
-   [PlDa]: <./install-etcd.md>
-   [PlDb]: <./configure-ca.md>
-   [PlDc]: <./etcd-transit-encryption.md>
-   [PlDd]: <./etcd-client-auth.md>
-   [PlDe]: <./etcd-systemd.md>
-   [PlDf]: <./configure-apiserver.md>
-   [PlDg]: <./apiserver-transit-encryption.md>  
-   [PlDh]: <./token-authentication.md>
-   [PlDi]: <./downside-token-auth.md>
-   [PlDj]: <./certificate-auth-k8s.md>
-   [PlDk]: <./authorization.md>
-   [PlDl]: <./encryption-provider.md>
-   [PlDm]: <./audit-logs.md>
-   [PlDn]: <./kubeadm.md>
-   [PlDo]: <./taint.md>
-   [PlDp]: <./kubelet-security.md >
-   [PlDq]: <.//verify-binaries.md>
+### Before execute
+- ca-install.sh 
+- etcd-install.sh
+- kube-apiserver-install.sh
+
+## k8s-install-with-kubeadm.sh
+- Install Kubernetes Controlplane Node
+- Remove taint on Controlplane to run pod
+### Before execute
+- stop etcd service
+- remove  /var/lib/etcd/members directory
+- stop kube-apiserver service

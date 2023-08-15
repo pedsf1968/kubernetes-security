@@ -12,8 +12,18 @@ cp config.yaml config.yaml.bak
 ```
 
 ```sh
-Set anonymous auth to false
-Authorization Mode to AlwaysAllow
+edit and replace
+authentication:
+  anonymous:
+    enabled: true
+  webhook:
+    cacheTTL: 0s
+    enabled: true
+  x509:
+    clientCAFile: /etc/kubernetes/pki/ca.crt
+authorization:
+  mode: AlwaysAllow
+
 ```
 
 ```sh
@@ -32,7 +42,9 @@ curl -k -X GET https://localhost:10250/pods
 https://github.com/cyberark/kubeletctl
 
 ```sh
-curl -LO https://github.com/cyberark/kubeletctl/releases/download/v1.6/kubeletctl_linux_amd64 && chmod a+x ./kubeletctl_linux_amd64 && mv ./kubeletctl_linux_amd64 /usr/local/bin/kubeletctl
+curl -LO https://github.com/cyberark/kubeletctl/releases/download/v1.6/kubeletctl_linux_amd64
+chmod a+x ./kubeletctl_linux_amd64 
+mv ./kubeletctl_linux_amd64 /usr/local/bin/kubeletctl
 ```
 
 ```sh

@@ -74,10 +74,11 @@ clusterInit() {
    echo -e "Initialise cluster with pod network $KUBERNETES_NETWORKING"
    case $KUBERNETES_NETWORKING in
       "calico")
-         KUBERNETES_POD_NETWORK_CIDR=$FLANNEL_CIDR;;
+         KUBERNETES_POD_NETWORK_CIDR=$FLANNEL_CIDR ;;
       "flannel")
+         KUBERNETES_POD_NETWORK_CIDR=$FLANNEL_CIDR ;;
       *)
-         KUBERNETES_POD_NETWORK_CIDR=$FLANNEL_CIDR;;
+         KUBERNETES_POD_NETWORK_CIDR=$FLANNEL_CIDR ;;
    esac
    kubeadm init --pod-network-cidr=$KUBERNETES_POD_NETWORK_CIDR --kubernetes-version=$KUBERNETES_VERSION --node-name controlplane
 }
@@ -94,11 +95,26 @@ networkInstall(){
    case $KUBERNETES_NETWORKING in
       "calico")
          kubectl apply -f $CALICO_MANIFEST
-         kubectl apply -f $CALICO_CUSTOM_RESOURCES_MANIFEST;;
+         kubectl apply -f $CALICO_CUSTOM_RESOURCES_MANIFEST ;;
       "flannel")
+         kubectl apply -f $FLANNEL_MANIFEST ;;
       *)
-         kubectl apply -f $FLANNEL_MANIFEST;;
+         kubectl apply -f $FLANNEL_MANIFEST ;;
    esac  
+}
+
+removeControlplaneTaint(){
+   echo -e "Remove Controlplane taint"
+   kubectl taint node controlplane  node-role.kubernetes.io/master-
+   kubectl taint node controlplane  node-role.kubernetes.io/control-plane:NoSchedule-
+}
+
+kubeletctlInstall(){
+   echo -e "Install kubeletctl tools"
+   cd /tmp
+   curl -LO https://github.com/cyberark/kubeletctl/releases/download/v1.6/kubeletctl_linux_amd64
+   chmod a+x ./kubeletctl_linux_amd64 
+   mv ./kubeletctl_linux_amd64 /usr/local/bin/kubeletctl
 }
 
 main() {
@@ -112,6 +128,8 @@ main() {
    clusterInit
    copyConfig
    networkInstall
+   removeControlplaneTaint
+   kubeletctlInstall
 }
 
 main

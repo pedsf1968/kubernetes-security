@@ -36,7 +36,7 @@ cp /etc/kubernetes/pki/ca.crt /home/john
 chown -R john.john /home/john
 ```
 ```sh
-kubectl get pods --server=https://134.209.147.191:6443 --client-certificate /home/john/john.crt --certificate-authority /home/john/ca.crt --client-key /home/john/john.key
+kubectl get pods --server=https://172.31.30.226:6443 --client-certificate /home/john/john.crt --certificate-authority /home/john/ca.crt --client-key /home/john/john.key
 ```
 Note: Make sure to replace the above IP Address within the --server block.
 #### Step 4 - Create Kubeconfig file for John:
@@ -45,11 +45,7 @@ su - john
 export SERVER_IP=
 ```
 ```sh
-kubectl config set-cluster kubeadm \
-    --certificate-authority=/home/john/ca.crt \
-    --embed-certs=true \
-    --server=https://${SERVER_IP}:6443 \
-    --kubeconfig=john.kubeconfig
+kubectl config set-cluster kubeadm --certificate-authority=/home/john/ca.crt --embed-certs=true --server=https://${SERVER_IP}:6443 --kubeconfig=john.kubeconfig
 
 kubectl config set-credentials john \
     --client-certificate=john.crt \

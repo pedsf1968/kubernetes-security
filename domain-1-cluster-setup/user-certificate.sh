@@ -1,4 +1,5 @@
 #!/bin/bash
+
 if [[ -n "$1" ]]; then
     USER_NAME=$1
 else
@@ -24,7 +25,7 @@ generateCertificate(){
     cd $ROOT_CERTIFICATES_FOLDER/$USER_NAME
 
     cp $ROOT_CERTIFICATES_FOLDER/ca.crt .
-    
+
     openssl genrsa -out $USER_NAME.key 2048
     openssl req -new -key $USER_NAME.key -subj "/CN=$USER_NAME/O=$USER_GROUP" -out $USER_NAME.csr
     openssl x509 -req -in $USER_NAME.csr -CA ca.crt -CAkey $ROOT_CERTIFICATES_FOLDER/ca.key -CAcreateserial -out $USER_NAME.crt -days 1000

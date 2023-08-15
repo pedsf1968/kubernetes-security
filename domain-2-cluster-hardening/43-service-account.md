@@ -21,6 +21,32 @@ kubectl get pod nginx -o yaml
 #### Create POD with custom service account:
 ```sh
 kubectl create sa kplabs
-kubectl run nginx-sa --image=nginx --serviceaccount="kplabs"
+# deprecate: kubectl run nginx-sa --image=nginx --serviceaccount="kplabs"
+kubectl run nginx-sa --image=nginx --dry-run=client -o yaml > pod.yaml
+
+vim pod.yaml
+```
+```sh
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: nginx-sa
+  name: nginx-sa
+spec:
+  serviceAccountName: kplabs
+  automountServiceAccountToken: false
+  containers:
+  - image: nginx
+    name: nginx-sa
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+```
+
+```sh
+kubectl apply -f pod.yaml
 kubectl get pod nginx-sa -o yaml
 ```

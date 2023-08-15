@@ -28,6 +28,7 @@ metadata:
   annotations:
      nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
+  ingressClassName: nginx
   tls:
   - hosts:
       - example.internal
