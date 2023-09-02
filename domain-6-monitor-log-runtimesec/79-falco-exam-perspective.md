@@ -13,7 +13,7 @@
 
 ```sh
 timeout 25s falco | grep demo
-nano /root/logs.txt
+vim /root/logs.txt
 cat logs.txt | awk '{print $4 " " $5 " " $6}' > /tmp/logs.txt
 cat /tmp/logs.txt
 ```

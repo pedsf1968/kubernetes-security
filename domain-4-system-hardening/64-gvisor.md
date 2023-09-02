@@ -37,25 +37,61 @@ minikube addons list
 minikube addons enable gvisor
 minikube addons list
 ```
+
+
+# Runsc with containerd
+## Install Runsc
+```sh
+# Install packages
+sudo apt-get update && sudo apt-get install -y apt-transport-https ca-certificates curl  gnupg
+
+# get repo key
+curl -fsSL https://gvisor.dev/archive.key | sudo gpg --dearmor -o /usr/share/keyrings/gvisor-archive-keyring.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/gvisor-archive-keyring.gpg] https://storage.googleapis.com/gvisor/releases release main" | sudo tee /etc/apt/sources.list.d/gvisor.list > /dev/null
+
+# Install Runsc package
+sudo apt-get update && sudo apt-get install -y runsc
+```
+
+## Configure
+
+```sh
+cat <<EOF | sudo tee /etc/containerd/config.toml
+version = 2
+[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
+  runtime_type = "io.containerd.runc.v2"
+[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runsc]
+  runtime_type = "io.containerd.runsc.v1"
+[plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runsc.options]
+  TypeUrl = "io.containerd.runsc.v1.options"
+  ConfigPath = "/etc/containerd/runsc.toml"
+EOF
+```
+
+```sh
+sudo systemctl restart containerd
+```
+
+
 ####  Step 5 - Explore gVisor:
 ```sh
 kubectl get runtimeclass
 ```
 ```sh
-nano runtimeclass.yaml
+vim runtimeclass.yaml
 ```
 ```sh
 apiVersion: node.k8s.io/v1
 kind: RuntimeClass
 metadata:
-  name: gvisor2
+  name: gvisor
 handler: runsc
 ```
 ```sh
 kubectl apply -f runtimeclass.yaml
 ```
 ```sh
-nano gvisor-pod.yaml
+vim gvisor-pod.yaml
 ```
 ```sh
 apiVersion: v1
@@ -63,7 +99,7 @@ kind: Pod
 metadata:
   name: nginx
 spec:
-  runtimeClassName: gvisor2
+  runtimeClassName: gvisor
   containers:
   - image: nginx
     name: nginx
@@ -87,3 +123,4 @@ logout
 kubectl exec -it nginx-default -- bash
 dmesg
 ```
+

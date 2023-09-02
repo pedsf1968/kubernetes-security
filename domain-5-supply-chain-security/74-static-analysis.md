@@ -1,5 +1,6 @@
 ### Documentation:
 
+
 https://github.com/bridgecrewio/checkov
 
 #### Install the Tool:
@@ -9,7 +10,7 @@ pip3 install checkov
 ```
 #### Our Demo Manifest File:
 ```sh
-nano pod-priv.yaml
+vim pod-priv.yaml
 ```
 ```sh
 apiVersion: v1

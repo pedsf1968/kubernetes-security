@@ -2,7 +2,7 @@
 #### Create a POD with ReadOnlyRootFileSystem:
 
 ```sh
-nano immutable.yaml
+vim immutable.yaml
 ```
 ```sh
 apiVersion: v1

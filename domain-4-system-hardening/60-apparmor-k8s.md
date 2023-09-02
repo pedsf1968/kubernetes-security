@@ -15,7 +15,7 @@ EOF
 ```
 #### Verify the status of the profile:
 ```sh
-aa-status
+aa-status  | grep k8s
 ```
 
 #### Sample YAML File based on Host PID:

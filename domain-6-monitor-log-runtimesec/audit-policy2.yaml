@@ -1,0 +1,13 @@
+apiVersion: audit.k8s.io/v1 
+kind: Policy
+rules:
+  - level: None
+    resources:
+    - group: ""
+      resources: ["secrets"]
+    namespaces: ["kube-system"]
+
+  - level: Metadata
+    resources:
+    - group: ""
+      resources: ["secrets"]

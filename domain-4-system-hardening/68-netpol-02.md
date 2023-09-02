@@ -20,7 +20,7 @@ spec:
      - ipBlock:
         cidr: 192.168.0.0/16
         except:
-        - 192.168.137.70/32
+        -  192.168.49.72/32
   policyTypes:
   - Ingress
 ```
