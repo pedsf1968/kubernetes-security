@@ -1,3 +1,6 @@
+# Installing Trivy:
+curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/master/contrib/install.sh | sh -s -- -b /usr/local/bin
+
 # scan kube-apiserver image
 ## Get image version
 kubectl -n kube-system  describe pod kube-apiserver-controlplane | grep -i image
